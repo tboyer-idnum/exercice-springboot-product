@@ -4,6 +4,8 @@ import com.example.demo.model.Country;
 import com.example.demo.model.Product;
 
 import com.example.demo.strategies.Tax.ContextTax;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +23,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/products")
+@Tag(name = "Produits", description = "Opérations liées aux produits")
 public class ProductController
 {
     // Simulation d'une base de données
@@ -35,6 +38,7 @@ public class ProductController
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Récupère un produit par son ID")
     public ResponseEntity<Product> getProductById(@PathVariable Long id) {
         return this.products.stream()
             .filter(p -> p.getId().equals(id))
@@ -44,6 +48,7 @@ public class ProductController
     }
 
     @PostMapping
+    @Operation(summary = "Crée un produit")
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         product.setId(nextId++);
         this.products.add(product);
@@ -52,11 +57,12 @@ public class ProductController
     }
 
     @GetMapping("/{id}/final-price")
+    @Operation(summary = "Retourne le prix final d'un produit avec son ID")
     public ResponseEntity getFinalPriceOfProduct(@PathVariable Long id) {
-        ResponseEntity response = null;
+        ResponseEntity response;
 
         try {
-            BigDecimal finalPrice = new BigDecimal(0.0);
+            BigDecimal finalPrice;
             Optional<ResponseEntity<Product>> entity = this.products.stream()
                     .filter(p -> p.getId().equals(id))
                     .findFirst()
