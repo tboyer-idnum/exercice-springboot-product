@@ -1,0 +1,3 @@
+/home/tboyer/IdeaProjects/exercice-springboot-product/src/test/java/com/example/demo/DemoApplicationTests.java
+/home/tboyer/IdeaProjects/exercice-springboot-product/src/test/java/com/example/demo/integrationsTests/ProductControllerTest.java
+/home/tboyer/IdeaProjects/exercice-springboot-product/src/test/java/com/example/demo/unitTests/Tax/TaxStrategyTest.java
