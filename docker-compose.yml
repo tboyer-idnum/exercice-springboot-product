@@ -1,0 +1,45 @@
+version: '3.8'
+
+networks:
+  traefik_bridge:
+    external: true
+
+volumes:
+  postgres_data:
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  spring-boot-app:
+    build: app
+    container_name: spring_boot_api
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${POSTGRES_USER}:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      traefik_bridge:
+    labels:
+      traefik.enable: 'true'
+      traefik.docker.network: traefik_bridge
+      traefik.http.routers.exo-spring-boot.entrypoints: web
+      traefik.http.routers.exo-spring-boot.rule: Host(`${DOMAIN}`)
