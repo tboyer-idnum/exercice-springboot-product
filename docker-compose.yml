@@ -43,3 +43,23 @@ services:
       traefik.docker.network: traefik_bridge
       traefik.http.routers.exo-spring-boot.entrypoints: web
       traefik.http.routers.exo-spring-boot.rule: Host(`${DOMAIN}`)
+
+  infra-dev:
+    image: traefik:${TRAEFIK_VERSION}
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./infra-dev/traefik.yml:/etc/traefik/traefik.yml:ro
+    networks:
+      - traefik_bridge
+    labels:
+      traefik.enable: true
+      traefik.http.routers.traefik_exo-spring-boot.entrypoints: web
+      traefik.http.routers.traefik_exo-spring-boot.rule: Host(`traefik.${DOMAIN}`)
+      traefik.http.routers.traefik_exo-spring-boot.service: api@internal
+      traefik.docker.network: traefik_bridge

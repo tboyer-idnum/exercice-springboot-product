@@ -2,7 +2,7 @@
 
 ### 1.1. Dépendances
 
-Avant d'installer le projet assurez vous d'avoit Maven
+Avant d'installer le projet assurez vous d'avoir Docker & docker-compose
 
 ### 1.2. Initialisation
 
