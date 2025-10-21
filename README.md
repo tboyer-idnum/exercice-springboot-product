@@ -5,7 +5,7 @@
 
 ### 1.1. Dépendances
 
-Avant d'installer le projet assurez vous d'avoit Maven
+Avant d'installer le projet assurez vous d'avoir le `JDK 21` & `Maven`
 
 ### 1.2. Initialisation
 
