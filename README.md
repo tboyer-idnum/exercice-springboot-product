@@ -3,6 +3,7 @@
 ### 1.1. Dépendances
 
 Avant d'installer le projet assurez vous d'avoir `make`, `Docker` & `docker-compose` sur votre machine
+> ⚠️ une machine Linux est recommandée
 
 ### 1.2. Initialisation
 
@@ -18,7 +19,7 @@ L'application est alors accessible à l'adresse suivante :
 
 ### 1.2. Exécution des tests automatisés
 
-Les tests sont exécutés lors de la commande
+Les tests sont exécutés lors de la commande :
 ```Shell
 make test
 ```
