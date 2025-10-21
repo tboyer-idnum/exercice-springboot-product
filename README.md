@@ -1,3 +1,6 @@
+💡 une branche `dev` existe et permet d'aller un peu plus loin dans l'exercice (utilisation d'une stack docker-compose avec une base de données)
+
+
 ## 💡 1. Installation
 
 ### 1.1. Dépendances
