@@ -28,4 +28,4 @@ COPY src ./src
 EXPOSE 8080
 
 # Lance Maven avec spring-boot:run en mode développement
-CMD ["mvn", "spring-boot:run"]
+CMD ["mvn", "spring-boot:run", "-Dspring-boot.run.arguments=--server.port=8080"]

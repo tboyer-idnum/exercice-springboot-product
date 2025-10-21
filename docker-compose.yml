@@ -1,6 +1,7 @@
 version: '3.8'
 
 networks:
+  db_bridge:
   traefik_bridge:
     external: true
 
@@ -17,15 +18,17 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      db_bridge:
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  spring-boot-app:
+  app:
     build: app
-    container_name: spring_boot_api
+    working_dir: /app
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://${POSTGRES_USER}:5432/${POSTGRES_DB}
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
@@ -36,8 +39,11 @@ services:
       postgres:
         condition: service_healthy
     restart: unless-stopped
+    volumes:
+      - ./app:/app/
     networks:
       traefik_bridge:
+      db_bridge:
     labels:
       traefik.enable: 'true'
       traefik.docker.network: traefik_bridge
@@ -56,7 +62,8 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - ./infra-dev/traefik.yml:/etc/traefik/traefik.yml:ro
     networks:
-      - traefik_bridge
+      traefik_bridge:
+      db_bridge:
     labels:
       traefik.enable: true
       traefik.http.routers.traefik_exo-spring-boot.entrypoints: web
