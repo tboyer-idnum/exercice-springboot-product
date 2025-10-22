@@ -19,7 +19,7 @@ import com.example.demo.entity.ProductEntity;
 import com.example.demo.repository.ProductRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 class ProductControllerIntegrationTest {
@@ -33,7 +33,7 @@ class ProductControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private ProductEntity testProduct;
+    private ProductEntity testProduct, testProduct2;
 
     @BeforeEach
     void setUp() {
@@ -46,7 +46,14 @@ class ProductControllerIntegrationTest {
         testProduct.setPrice(new BigDecimal("999.99"));
         testProduct.setCountry("FRANCE");
 
+        // Crée et insère un produit de test en base de données
+        testProduct2 = new ProductEntity();
+        testProduct2.setName("Keyboard");
+        testProduct2.setPrice(new BigDecimal("30.0"));
+        testProduct2.setCountry("US");
+
         testProduct = productRepository.save(testProduct);
+        testProduct2 = productRepository.save(testProduct2);
     }
 
     @Test
@@ -139,5 +146,20 @@ class ProductControllerIntegrationTest {
 
         // Verify product is deleted from database
         assert productRepository.count() == 0;
+    }
+
+    @Test
+    void testGetProductFinalPrice() throws Exception {
+        // Act & Assert
+        mockMvc.perform(get("/api/products/{id}/final-price", testProduct.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string("1199.988"));
+
+        // Act & Assert
+        mockMvc.perform(get("/api/products/{id}/final-price", testProduct2.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string("36.0"));
     }
 }
