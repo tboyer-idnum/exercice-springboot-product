@@ -4,6 +4,8 @@
 
 Avant d'installer le projet assurez vous d'avoir `make`, `ccze`, `Docker` & `docker-compose` sur votre machine
 > ⚠️ une machine Linux est recommandée
+> 
+> ⚠️ vos ports `80` & `443` doivent être préalablement fermés (utilisation de Traefik en reverse-proxy pour une url propre)
 
 ### 1.2. Initialisation
 
