@@ -80,7 +80,7 @@ class ProductControllerIntegrationTest {
 
     @Test
     void testGetAllProducts() throws Exception {
-        // Arrange : insert un deuxième produit
+        // Arrange : insert un troisième produit
         ProductEntity product2 = new ProductEntity();
         product2.setName("Mouse");
         product2.setPrice(new BigDecimal("29.99"));
@@ -91,9 +91,10 @@ class ProductControllerIntegrationTest {
         mockMvc.perform(get("/api/products")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].name", equalTo("Laptop")))
-                .andExpect(jsonPath("$[1].name", equalTo("Mouse")));
+                .andExpect(jsonPath("$", hasSize(3)))
+                .andExpect(jsonPath("$[0].name", equalTo(testProduct.getName())))
+                .andExpect(jsonPath("$[1].name", equalTo(testProduct2.getName())))
+                .andExpect(jsonPath("$[2].name", equalTo("Mouse")));
     }
 
     @Test
@@ -115,7 +116,7 @@ class ProductControllerIntegrationTest {
                 .andExpect(jsonPath("$.id", notNullValue()));
 
         // Vérify that product is saved in database
-        assert productRepository.count() == 2;
+        assert productRepository.count() == 3;
     }
 
     @Test
@@ -141,6 +142,9 @@ class ProductControllerIntegrationTest {
     void testDeleteProduct() throws Exception {
         // Act & Assert
         mockMvc.perform(delete("/api/products/{id}", testProduct.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+        mockMvc.perform(delete("/api/products/{id}", testProduct2.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
