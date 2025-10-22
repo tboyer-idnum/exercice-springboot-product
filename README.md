@@ -19,8 +19,8 @@ L'application est alors accessible aux adresses suivantes :
 - POST [http://exo-spring-boot.localhost/api/products](http://exo-spring-boot.localhost/api/products)
 ```json
 {
-	"name": "test",
-	"price": 666.0,
+	"name": "Laptop",
+	"price": 1000.0,
 	"country": "FRANCE"
 }
 ```
