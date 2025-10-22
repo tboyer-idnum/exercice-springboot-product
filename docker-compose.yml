@@ -28,6 +28,7 @@ services:
 
   app:
     build: app
+    user: "${UID}"
     working_dir: /app
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://${POSTGRES_USER}:5432/${POSTGRES_DB}

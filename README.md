@@ -34,3 +34,8 @@ Les tests sont exécutés lors de la commande :
 ```Shell
 make test
 ```
+> ⚠️ pour une exécution des tests dans un environnement IntelliJ IDEA :
+> 
+> il faudra vous assurez que votre ID user Linux est bien `1000`
+> 
+> si ce n'est pas le cas, modifier la valeur de la variable UID dans le fichier .env à la racine du projet
