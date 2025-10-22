@@ -45,8 +45,8 @@ public class ContextTax
         if (this.taxStrategy == null) {
             this.taxStrategy = (TaxStrategy) switch (this.country) {
                 case FRANCE -> new FranceTaxStrategy();
-                case US -> new FranceTaxStrategy();
-                case CANADA -> new FranceTaxStrategy();
+                case US -> new UsTaxStrategy();
+                case CANADA -> new CanadaTaxStrategy();
                 default -> throw new IllegalCountryException("Ce pays n'est pas géré");
             };
         }
