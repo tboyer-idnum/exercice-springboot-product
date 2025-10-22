@@ -2,7 +2,7 @@
 
 ### 1.1. Dépendances
 
-Avant d'installer le projet assurez vous d'avoir `make`, `Docker` & `docker-compose` sur votre machine
+Avant d'installer le projet assurez vous d'avoir `make`, `ccze`, `Docker` & `docker-compose` sur votre machine
 > ⚠️ une machine Linux est recommandée
 
 ### 1.2. Initialisation
@@ -11,6 +11,8 @@ Après le clonage du dépôt, initialisez le projet via :
 ```Shell
 make up
 ```
+
+Attendre la fin de l'installation "Tomcat started on port 8080 (http) with context path '/'" avant de poursuivre
 
 L'application est alors accessible aux adresses suivantes :
 

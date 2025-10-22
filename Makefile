@@ -9,8 +9,9 @@ help:
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' Makefile| sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[32m%-15s\033[0m %s\n", $$1, $$2}'
 .PHONY: up
 up: ## Start app and verify dependencies & db
-	docker-compose up --build --detach --remove-orphans
+	docker compose up --build --detach --remove-orphans
+	docker compose logs -f app | ccze -m ansi
 
 .PHONY: test
 test: ## Start app and verify dependencies & db
-	docker-compose exec app mvn test
+	docker compose exec app mvn test
