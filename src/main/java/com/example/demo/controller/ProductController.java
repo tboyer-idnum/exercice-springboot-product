@@ -33,8 +33,8 @@ public class ProductController
     public ProductController() {
         // Données de test
         this.products.add(new Product(nextId++, "Laptop", new BigDecimal(999.99), Country.FRANCE));
-        this.products.add(new Product(nextId++, "Souris", new BigDecimal(29.99), Country.US));
-        this.products.add(new Product(nextId++, "Clavier", new BigDecimal(79.99), Country.CANADA));
+        this.products.add(new Product(nextId++, "Souris", new BigDecimal(30.0), Country.US));
+        this.products.add(new Product(nextId++, "Clavier", new BigDecimal(30.0), Country.CANADA));
     }
 
     @GetMapping("/{id}")

@@ -57,7 +57,18 @@ public class ProductControllerTest {
         // Produit avec ID 1 est en France
         mockMvc.perform(get("/api/products/1/final-price"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().string("1199.988"));
+        // Produit avec ID 2 est aux US
+        mockMvc.perform(get("/api/products/2/final-price"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().string("32.4"));
+        // Produit avec ID 1 est au Canada
+        mockMvc.perform(get("/api/products/3/final-price"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().string("33.9"));
     }
 
     @Test
