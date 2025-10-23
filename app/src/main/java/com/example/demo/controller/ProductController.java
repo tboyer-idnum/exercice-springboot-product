@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/products")
@@ -43,7 +42,7 @@ public class ProductController
     }
 
     @GetMapping("/{id}/final-price")
-    @Operation(summary = "Retourne le prix final d'un produit avec son ID")
+    @Operation(summary = "Retourne le prix final d'un produit recherché avec son ID")
     public ResponseEntity getFinalPriceOfProduct(@PathVariable Long id) {
         ResponseEntity response;
 
