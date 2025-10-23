@@ -33,7 +33,7 @@ class ProductControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private ProductEntity testProduct, testProduct2;
+    private ProductEntity testProductFRANCE, testProductUS, testProductCANADA;
 
     @BeforeEach
     void setUp() {
@@ -41,28 +41,35 @@ class ProductControllerIntegrationTest {
         productRepository.deleteAll();
 
         // Crée et insère un produit de test en base de données
-        testProduct = new ProductEntity();
-        testProduct.setName("Laptop");
-        testProduct.setPrice(new BigDecimal("999.99"));
-        testProduct.setCountry("FRANCE");
+        testProductFRANCE = new ProductEntity();
+        testProductFRANCE.setName("Laptop");
+        testProductFRANCE.setPrice(new BigDecimal("999.99"));
+        testProductFRANCE.setCountry("FRANCE");
 
         // Crée et insère un produit de test en base de données
-        testProduct2 = new ProductEntity();
-        testProduct2.setName("Keyboard");
-        testProduct2.setPrice(new BigDecimal("30.0"));
-        testProduct2.setCountry("US");
+        testProductUS = new ProductEntity();
+        testProductUS.setName("Keyboard");
+        testProductUS.setPrice(new BigDecimal("30.0"));
+        testProductUS.setCountry("US");
 
-        testProduct = productRepository.save(testProduct);
-        testProduct2 = productRepository.save(testProduct2);
+        // Crée et insère un produit de test en base de données
+        testProductCANADA = new ProductEntity();
+        testProductCANADA.setName("Speakers");
+        testProductCANADA.setPrice(new BigDecimal("30.0"));
+        testProductCANADA.setCountry("CANADA");
+
+        testProductFRANCE = productRepository.save(testProductFRANCE);
+        testProductUS = productRepository.save(testProductUS);
+        testProductCANADA = productRepository.save(testProductCANADA);
     }
 
     @Test
     void testGetProductById_found() throws Exception {
         // Act & Assert
-        mockMvc.perform(get("/api/products/{id}", testProduct.getId())
+        mockMvc.perform(get("/api/products/{id}", testProductFRANCE.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(testProduct.getId().intValue())))
+                .andExpect(jsonPath("$.id", is(testProductFRANCE.getId().intValue())))
                 .andExpect(jsonPath("$.name", equalTo("Laptop")))
                 .andExpect(jsonPath("$.price", is(999.99)))
                 .andExpect(jsonPath("$.country", equalTo("FRANCE")));
@@ -91,10 +98,11 @@ class ProductControllerIntegrationTest {
         mockMvc.perform(get("/api/products")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[0].name", equalTo(testProduct.getName())))
-                .andExpect(jsonPath("$[1].name", equalTo(testProduct2.getName())))
-                .andExpect(jsonPath("$[2].name", equalTo("Mouse")));
+                .andExpect(jsonPath("$", hasSize(4)))
+                .andExpect(jsonPath("$[0].name", equalTo(testProductFRANCE.getName())))
+                .andExpect(jsonPath("$[1].name", equalTo(testProductUS.getName())))
+                .andExpect(jsonPath("$[2].name", equalTo(testProductCANADA.getName())))
+                .andExpect(jsonPath("$[3].name", equalTo("Mouse")));
     }
 
     @Test
@@ -116,7 +124,7 @@ class ProductControllerIntegrationTest {
                 .andExpect(jsonPath("$.id", notNullValue()));
 
         // Vérify that product is saved in database
-        assert productRepository.count() == 3;
+        assert productRepository.count() == 4;
     }
 
     @Test
@@ -128,11 +136,11 @@ class ProductControllerIntegrationTest {
         updatedProduct.setCountry("CANADA");
 
         // Act & Assert
-        mockMvc.perform(put("/api/products/{id}", testProduct.getId())
+        mockMvc.perform(put("/api/products/{id}", testProductFRANCE.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatedProduct)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(testProduct.getId().intValue())))
+                .andExpect(jsonPath("$.id", is(testProductFRANCE.getId().intValue())))
                 .andExpect(jsonPath("$.name", equalTo("Updated Laptop")))
                 .andExpect(jsonPath("$.price", is(1099.99)))
                 .andExpect(jsonPath("$.country", equalTo("CANADA")));
@@ -141,10 +149,13 @@ class ProductControllerIntegrationTest {
     @Test
     void testDeleteProduct() throws Exception {
         // Act & Assert
-        mockMvc.perform(delete("/api/products/{id}", testProduct.getId())
+        mockMvc.perform(delete("/api/products/{id}", testProductFRANCE.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
-        mockMvc.perform(delete("/api/products/{id}", testProduct2.getId())
+        mockMvc.perform(delete("/api/products/{id}", testProductUS.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+        mockMvc.perform(delete("/api/products/{id}", testProductCANADA.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
@@ -155,15 +166,21 @@ class ProductControllerIntegrationTest {
     @Test
     void testGetProductFinalPrice() throws Exception {
         // Act & Assert
-        mockMvc.perform(get("/api/products/{id}/final-price", testProduct.getId())
+        mockMvc.perform(get("/api/products/{id}/final-price", testProductFRANCE.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string("1199.988"));
 
         // Act & Assert
-        mockMvc.perform(get("/api/products/{id}/final-price", testProduct2.getId())
+        mockMvc.perform(get("/api/products/{id}/final-price", testProductUS.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string("36.0"));
+                .andExpect(content().string("32.4"));
+
+        // Act & Assert
+        mockMvc.perform(get("/api/products/{id}/final-price", testProductCANADA.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string("33.9"));
     }
 }
