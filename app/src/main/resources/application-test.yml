@@ -12,4 +12,14 @@ spring:
     show-sql: false
 
 server:
-  port: 8080
+  port: 0
+
+logging:
+  level:
+    root: INFO
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
